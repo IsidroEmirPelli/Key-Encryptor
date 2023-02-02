@@ -1,7 +1,6 @@
 import { FC, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-// import KeyInterface from '../../key-interface/key-interface';
 
 const KeyCreator: FC = () => {
     const [title, setTitle] = useState('')
