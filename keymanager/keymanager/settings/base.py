@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_swagger",
     "rest_framework_simplejwt",
+    'corsheaders',
 
     "keygenerator",
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -142,3 +144,5 @@ REST_FRAMEWORK = {
 
 LOGIN_URL = '/admin/'
 LOGOUT_URL = '/admin/logout/'
+
+CORS_ORIGIN_ALLOW_ALL=True
