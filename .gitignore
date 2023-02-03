@@ -6,3 +6,6 @@ notas.txt
 
 # python
 *.pyc
+
+# db
+*.sqlite3
