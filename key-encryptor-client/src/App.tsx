@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import KeyCreator from './modules/key/components/creator/creator';
-import SignIn from './modules/auth/components/sign-in/sign-in';
+import LogIn from './modules/auth/components/log-in/log-in';
 
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/key-creator' element={<KeyCreator />}></Route>
-          <Route path='/sign-in' element={<SignIn />}></Route>
+          <Route path='/sign-in' element={<LogIn />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import KeyInterface from '../../interface/key-interface';
+import KeyInterface from '../../interface/key';
 
 const Key: FC<{
     keyData: KeyInterface,
