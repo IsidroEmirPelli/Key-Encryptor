@@ -3,3 +3,6 @@ notas.txt
 
 # Bootstrap examples
 **/b-*
+
+# python
+*.pyc
