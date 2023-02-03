@@ -6,15 +6,15 @@ import { useNavigate } from 'react-router-dom';
 
 const SignIn: FC = () => {
     const nav = useNavigate()
-    const [email, setEmail] = useState('');
+    const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
     /**
     * This function is used to upload the user credentials.
     */
     const onSubmit = () => {
-        const user = {
-            username: email,
+        const user: UserInterface = {
+            username: username,
             password: password
         }
         axios.post('http://127.0.0.1:8000/api/token', user).then(
@@ -34,7 +34,7 @@ const SignIn: FC = () => {
                 </svg>
                 <h1 className="h3 mb-3 fw-normal mt-3">Sign in</h1>
                 <div className="form-floating">
-                    <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" onChange={(e) => { setEmail(e.target.value) }}></input>
+                    <input type="username" className="form-control" id="floatingInput" placeholder="name@example.com" onChange={(e) => { setUserName(e.target.value) }}></input>
                     <label htmlFor="floatingInput">Email address</label>
                 </div>
                 <div className="form-floating">
