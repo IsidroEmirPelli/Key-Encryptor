@@ -6,6 +6,7 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from django.http import HttpResponse
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import AccessToken
 
 class RegisterPasswordViewSet(ModelViewSet):
     """ Here we will create the API for register a new password in the database
@@ -13,17 +14,43 @@ class RegisterPasswordViewSet(ModelViewSet):
     serializer_class = password_serilizer.PasswordSerializer
     permission_classes = [IsAuthenticated]
 
+    def create(self, request):
+        """ Here we will create the password in the database """
+        try:
+            token = request.headers['Authorization'].split(' ')[1]
+            token = AccessToken(token)
+            user_id = token['id']
+            user = User.objects.get(id=user_id)
+            password = Password.objects.create(
+                user_owner=user,
+                title = request.data['title'],
+                username=request.data['username'],
+                password=request.data['password'],
+                notes=request.data['notes']
+            )
+            return HttpResponse(f'Password created successfully')
+        except Exception as e:
+            return HttpResponse(f'Unexpected error has ocurred {e}')
+
     def get(self, request):
         """ Here we will get the passwords from the database """
-        # we will get the username from the request
-        username = request.user.username
-        # we will get the user from the database
-        user = User.objects.get(username=username)
-        # we will get the passwords from the database
-        queryset = Password.objects.filter(email=user.username)
-        serializer = password_serilizer.PasswordSerializer(queryset, many=True)
+        try:
+            # get the token from the request
+            token = request.headers['Authorization'].split(' ')[1]
+            # decode the token
+            token = AccessToken(token)
+            # get the user id from the token
+            user_id = token['user_id']
+            # get the user from the database
+            user = User.objects.get(id=user_id)
+            # get the passwords from the database
+            passwords = Password.objects.filter(user_owner=user.id)
+            # serialize the passwords
+            serializer = password_serilizer.PasswordSerializer(passwords, many=True)
 
-        return HttpResponse(f'Passwords: {serializer.data}')
+            return HttpResponse(f'Passwords: {serializer.data}')
+        except Exception as e:
+            return HttpResponse(f'Unexpected error has ocurred {e}')
     
 class RegisterNewUser(ModelViewSet):
     """ Here we will create the API for register a new user in the database """

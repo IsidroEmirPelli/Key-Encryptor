@@ -6,3 +6,8 @@ notas.txt
 
 # backend
 .venv
+# python
+*.pyc
+
+# db
+*.sqlite3
