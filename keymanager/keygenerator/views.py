@@ -6,7 +6,9 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from django.http import HttpResponse
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import AccessToken
+# import JSONResponse
+from django.http import JsonResponse
+
 
 class RegisterPasswordViewSet(ModelViewSet):
     """ Here we will create the API for register a new password in the database
@@ -38,7 +40,7 @@ class RegisterPasswordViewSet(ModelViewSet):
             # serialize the passwords
             serializer = password_serilizer.PasswordSerializer(passwords, many=True)
 
-            return HttpResponse(f'Passwords: {serializer.data}')
+            return JsonResponse(serializer.data, safe=False)
         except Exception as e:
             return HttpResponse(f'Unexpected error has ocurred {e}')
     
