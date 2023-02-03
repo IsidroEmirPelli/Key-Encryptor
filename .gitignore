@@ -10,4 +10,4 @@ notas.txt
 *.pyc
 
 # db
-db.sqlite3
+keymanager/keymanager/db.sqlite3
