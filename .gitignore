@@ -4,6 +4,8 @@ notas.txt
 # Bootstrap examples
 **/b-*
 
+# backend
+.venv
 # python
 *.pyc
 
