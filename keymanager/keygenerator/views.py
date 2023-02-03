@@ -17,14 +17,12 @@ class RegisterPasswordViewSet(ModelViewSet):
     def create(self, request):
         """ Here we will create the password in the database """
         try:
-            token = request.headers['Authorization'].split(' ')[1]
-            token = AccessToken(token)
-            user_id = token['id']
-            user = User.objects.get(id=user_id)
+            user = request.user
+            user = User.objects.get(username=user)
             password = Password.objects.create(
                 user_owner=user,
                 title = request.data['title'],
-                username=request.data['username'],
+                username=request.data['userName'],
                 password=request.data['password'],
                 notes=request.data['notes']
             )
@@ -35,16 +33,8 @@ class RegisterPasswordViewSet(ModelViewSet):
     def get(self, request):
         """ Here we will get the passwords from the database """
         try:
-            # get the token from the request
-            token = request.headers['Authorization'].split(' ')[1]
-            # decode the token
-            token = AccessToken(token)
-            # get the user id from the token
-            user_id = token['user_id']
-            # get the user from the database
-            user = User.objects.get(id=user_id)
-            # get the passwords from the database
-            passwords = Password.objects.filter(user_owner=user.id)
+            user = request.user
+            passwords = Password.objects.filter(user_owner=user)
             # serialize the passwords
             serializer = password_serilizer.PasswordSerializer(passwords, many=True)
 
