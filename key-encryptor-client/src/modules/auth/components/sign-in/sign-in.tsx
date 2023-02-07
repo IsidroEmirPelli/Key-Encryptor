@@ -1,10 +1,10 @@
-import { FC, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import UserInterface from 'src/modules/user/interface/user';
 import { useNavigate } from 'react-router-dom';
 
-const SignIn: FC = () => {
+const SignIn: FC<{setUser: Dispatch<SetStateAction<UserInterface>>}> = ({ setUser }) => {
     const nav = useNavigate()
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
@@ -15,13 +15,19 @@ const SignIn: FC = () => {
     const onSubmit = () => {
         const user: UserInterface = {
             username: username,
-            password: password
+            password: password,
+            keyList: [],
+            img: ''
         }
-        axios.post('http://127.0.0.1:8000/api/token', user).then(
-            res => {
+
+        axios.post(
+            'http://127.0.0.1:8000/api/token',
+            user
+        )
+        .then(res => {
                 localStorage.setItem('token', res.data.access)
-                Swal.fire('Sesión iniciada')
-                nav('/key-creator')
+                setUser(res.data.user)
+                nav('/key-list')
             }
         ).then(err => { if (err !== undefined) Swal.fire('Datos incorrectos') })
     }
