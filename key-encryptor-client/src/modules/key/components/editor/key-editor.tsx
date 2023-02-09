@@ -1,28 +1,22 @@
-import { FC, useState } from 'react';
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import KeyDataInterface from '../../interface/key-data-interface';
+import { FC, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import getKey from '../../services/getkey';
+import uploadKey from '../../services/uploadkey';
 
 const Key: FC = () => {
     const [title, setTitle] = useState('')
-    const [username, setUserName] = useState('')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [notes, setNotes] = useState('')
+    const loc = useLocation()
 
-    const onSubmit = () => {
-        const _keyData: KeyDataInterface = {
-            title: title,
-            username: username,
-            password: password,
-            notes: notes,
-        }
-        console.log(_keyData)
-        axios.post('/api/new_pass', _keyData).then(res => {
-            Swal.fire(res.data)
-        }).then(err => {
-            if (err !== undefined) Swal.fire(`Error\n${err}`)
-        })
-    }
+    useEffect(() => {
+        const keyData = getKey(loc.state.title)
+        setTitle(keyData.title)
+        setUsername(keyData.username)
+        setPassword(keyData.password)
+        setNotes(keyData.notes)
+    }, [loc.state.title])
 
     return (
         <div className="main">
@@ -54,7 +48,7 @@ const Key: FC = () => {
                                 <label htmlFor="user-name" className="form-label">User Name</label>
                             </div>
                             <div className="col-10 text-start">
-                                <input type="text" className="form-control" id="user-name" placeholder="MyUserName" onChange={(e) => { setUserName(e.target.value) }}></input>
+                                <input type="text" className="form-control" id="user-name" placeholder="MyUserName" onChange={(e) => { setUsername(e.target.value) }}></input>
                             </div>
                         </div>
                     </div>
@@ -86,7 +80,9 @@ const Key: FC = () => {
 
                 {/* Submit Btt */}
                 <div className="w-25 mx-auto">
-                    <button className="w-100 btn btn-lg btn-primary mt-3" type="submit" onClick={onSubmit}>Create Key</button>
+                    <button className="w-100 btn btn-lg btn-primary mt-3" type="submit" onClick={
+                        () => { uploadKey({ title: title, username: username, password: password, notes: notes, }) }
+                    }>Create Key</button>
                 </div>
             </div>
         </div>
