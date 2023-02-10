@@ -1,11 +1,12 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import getUser from 'src/modules/user/services/get-user';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../context/component/auth-context';
 import signin from '../../services/signin';
 
 const SignIn: FC = () => {
-    const { isAuth, setIsAuth } = useContext(AuthContext);
+    const { isAuth, setIsAuth, setUser } = useContext(AuthContext);
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const nav = useNavigate()
@@ -17,6 +18,7 @@ const SignIn: FC = () => {
     const onSubmit = () => {
         const wasSigned = signin({ username: username, password: password })
         if (wasSigned) {
+            setUser(getUser())
             setIsAuth(wasSigned)
             nav('/keylist')
         } else {
