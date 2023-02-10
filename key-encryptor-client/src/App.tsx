@@ -28,6 +28,9 @@ const App: FC = () => {
                         <PrivateRoute
                             renderIfSigned={true}
                             element={<Route path={'/keylist'} element={<KeyList />} />} />
+                        {/* <PrivateRoute
+                            renderIfSigned={true}
+                            element={<Route path={'/keycreator'} element={<KeyEditor />} />} /> */}
                         <PrivateRoute
                             renderIfSigned={true}
                             element={<Route path={'/keyeditor'} element={<KeyEditor />} />} />
