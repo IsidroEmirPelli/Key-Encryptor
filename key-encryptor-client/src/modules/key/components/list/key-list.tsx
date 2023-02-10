@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import AOS from 'aos';
 import KeyDataInterface from '../../interface/key-data-interface';
-import Key from '../key/key';
+import Key from './key';
 import KeyComponentInterface from '../../interface/key-component-interface';
 import getKeylist from 'src/modules/user/services/get-keylist';
 
