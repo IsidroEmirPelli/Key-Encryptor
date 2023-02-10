@@ -2,7 +2,6 @@ import { createContext, FC, ReactNode, useEffect, useState } from "react";
 import UserInterface from "src/modules/user/interface/user";
 import authVerify from "../../services/auth-verify";
 import AuthContextInterface from "../interface/auth-context";
-import getUser from "src/modules/user/services/get-user";
 
 export const AuthContext = createContext<AuthContextInterface>({
     isAuth: false,
@@ -21,25 +20,37 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({ children }) =
     const [user, setUser] = useState<UserInterface>(
         { username: '', password: '', keyList: [], img: '' }
     )
-    const [localCounter, setLocalCounter] = useState<number>(0)
-    const [tokenCounter, setTokenCounter] = useState<number>(0)
 
+    // Contador para actividad del usuario
     useEffect(() => {
-        const interval = setInterval(() => {
-            setLocalCounter(localCounter + 1)
-        }, 1200000);
-        return () => clearInterval(interval)
-    }, [isAuth, localCounter])
-
-    // Contador fijo para REFRESH
-    useEffect(() => {
-        let intervalId: any
         if (isAuth) {
-            intervalId = setInterval(() => {
+            let interval: any;
+            const restartInterval = () => {
+                clearInterval(interval);
+                interval = setInterval(() => {
+                    authVerify(setIsAuth)
+                }, 1140000)
+            };
+            window.addEventListener('click', restartInterval);
+            interval = setInterval(() => {
                 authVerify(setIsAuth)
             }, 1140000)
+            return () => {
+                clearInterval(interval);
+                window.removeEventListener('click', restartInterval);
+            }
         }
-        return () => { clearInterval(intervalId) }
+    }, [isAuth])
+
+    // Contador para REFRESH
+    useEffect(() => {
+        if (isAuth) {
+            let interval: any
+            interval = setInterval(() => {
+                authVerify(setIsAuth)
+            }, 1140000)
+            return () => { clearInterval(interval) }
+        }
     }, [isAuth])
 
     return (
